@@ -1,5 +1,5 @@
-application: upload-gcs-data
-version: 1
+application: local-amenities
+version: 2
 runtime: python27
 api_version: 1
 threadsafe: yes

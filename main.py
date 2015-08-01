@@ -4,7 +4,6 @@ import csv, codecs, cStringIO
 import cloudstorage as gcs
 import webapp2
 import string
-from models import *
 from os import path
 from os.path import exists
 from google.appengine.api import app_identity
@@ -21,7 +20,7 @@ MAIN_PAGE_HTML = """\
   <body>
     <form action="/submit" method="post">
 	  <h2>Upload Tool </h2>
-	  <div>The tool provides a facility to upload data( in csv files) into the GCS cloud storage in a format compatible to the following data models for "Local Amenities Map".</div>
+	  <div>The tool provides a facility to upload data( in csv files) into the Google cloud storage in a format compatible to the following data models for "Local Amenities Map".</div>
 	  <ol>
 		<li> Postcode </li>
 		<li> Outcode </li>
@@ -222,7 +221,7 @@ class UploadPostcode(webapp2.RequestHandler):
 			self.response.write("File name doesn't exist in the app's directory" + '<br/><br/>')
 			
 		if (postcode_flag == True and latitude_flag == True and longitude_flag == True):
-			bucket_name = os.environ.get('upload-gcs-data.appspot.com', app_identity.get_default_gcs_bucket_name())
+			bucket_name = os.environ.get('local-amenities.appspot.com', app_identity.get_default_gcs_bucket_name())
 			self.response.headers['Content-Type'] = 'text/plain'
 			self.response.write('Demo GCS Application running from Version: '
                         + os.environ['CURRENT_VERSION_ID'] + '\n')
@@ -293,7 +292,7 @@ class UploadOutcode(webapp2.RequestHandler):
 			self.response.write("File name doesn't exist in the app's directory" + '<br/><br/>')
 				
 		if (outcode_flag == True and latitude_flag == True and longitude_flag == True):
-			bucket_name = os.environ.get('upload-gcs-data.appspot.com', app_identity.get_default_gcs_bucket_name())
+			bucket_name = os.environ.get('local-amenities.appspot.com', app_identity.get_default_gcs_bucket_name())
 			self.response.headers['Content-Type'] = 'text/plain'
 			self.response.write('Demo GCS Application running from Version: '
                         + os.environ['CURRENT_VERSION_ID'] + '\n')
@@ -364,7 +363,7 @@ class UploadTrainStation(webapp2.RequestHandler):
 			self.response.write("File name doesn't exist in the app's directory" + '<br/><br/>')
 				
 		if (name_flag == True and latitude_flag == True and longitude_flag == True):
-			bucket_name = os.environ.get('upload-gcs-data.appspot.com', app_identity.get_default_gcs_bucket_name())
+			bucket_name = os.environ.get('local-amenities.appspot.com', app_identity.get_default_gcs_bucket_name())
 			self.response.headers['Content-Type'] = 'text/plain'
 			self.response.write('Demo GCS Application running from Version: '
                         + os.environ['CURRENT_VERSION_ID'] + '\n')
@@ -458,7 +457,7 @@ class UploadData(webapp2.RequestHandler):
 			self.response.write("File name doesn't exist in the app's directory" + '<br/><br/>')
 				
 		if (name_flag == True and address_flag == True and postcode_flag == True and latitude_flag == True and longitude_flag == True):
-			bucket_name = os.environ.get('upload-gcs-data.appspot.com', app_identity.get_default_gcs_bucket_name())
+			bucket_name = os.environ.get('local-amenities.appspot.com', app_identity.get_default_gcs_bucket_name())
 			self.response.headers['Content-Type'] = 'text/plain'
 			self.response.write('Demo GCS Application running from Version: '
                         + os.environ['CURRENT_VERSION_ID'] + '\n')
