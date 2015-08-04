@@ -15,6 +15,7 @@ my_default_retry_params = gcs.RetryParams(initial_delay=0.2,
                                           max_retry_period=15)
 gcs.set_default_retry_params(my_default_retry_params)
 
+#HTML template for main page.
 MAIN_PAGE_HTML = """\
 <html>
   <body>
@@ -37,6 +38,7 @@ MAIN_PAGE_HTML = """\
 </html>
 """
 
+#HTML template for postcode form.
 POSTCODE_HTML = """\
 <html>
   <body>
@@ -55,6 +57,7 @@ POSTCODE_HTML = """\
 </html>
 """
 
+#HTML template for outcode form.
 OUTCODE_HTML = """\
 <html>
   <body>
@@ -73,6 +76,7 @@ OUTCODE_HTML = """\
 </html>
 """
 
+#HTML template for train station form.
 TRAIN_STATION_HTML = """\
 <html>
   <body>
@@ -91,6 +95,7 @@ TRAIN_STATION_HTML = """\
 </html>
 """
 
+#HTML template for GP form.
 GP_HTML = """\
 <html>
   <body>
@@ -111,6 +116,7 @@ GP_HTML = """\
 </html>
 """
 
+#HTML template for supermarket form.
 SUPERMARKET_HTML = """\
 <html>
   <body>
@@ -131,6 +137,7 @@ SUPERMARKET_HTML = """\
 </html>
 """
 
+#HTML template for school form.
 SCHOOL_HTML = """\
 <html>
   <body>
@@ -151,10 +158,12 @@ SCHOOL_HTML = """\
 </html>
 """
 
+#Render the main page of the application
 class MainPage(webapp2.RequestHandler):
 	def get(self):
 		self.response.write(MAIN_PAGE_HTML)
-		
+
+#Renders the HTML form specific to the user input.		
 class AdditionalDetails(webapp2.RequestHandler):
 	def post(self):
 		modelNumber = cgi.escape(self.request.get('model'))
@@ -173,6 +182,7 @@ class AdditionalDetails(webapp2.RequestHandler):
 		else:
 			self.response.write("Model number is not provided")
 
+#Function to check if the column exists in the app's directory.
 def CheckColumnExists(filename, columnName):
 	found = False
 	f=open(filename)
@@ -183,12 +193,16 @@ def CheckColumnExists(filename, columnName):
 				found = True
 		break
 	return found
-	
+
+#Uploads postcode data on to GCS default bucket.	
 class UploadPostcode(webapp2.RequestHandler):
 	def post(self):
+		#Initialise flags.
 		postcode_flag = False
 		latitude_flag = False
 		longitude_flag = False
+		
+		#User input validation.
 		filename  = cgi.escape(self.request.get('filename'))
 		if filename == "":
 			self.response.write("File name is required" + '<br/><br/>')
@@ -219,7 +233,8 @@ class UploadPostcode(webapp2.RequestHandler):
 					longitude_flag = True
 		else:
 			self.response.write("File name doesn't exist in the app's directory" + '<br/><br/>')
-			
+		
+		#If all necessary input is available then application creates GCS file in default bucket and uploads data.
 		if (postcode_flag == True and latitude_flag == True and longitude_flag == True):
 			bucket_name = os.environ.get('local-amenities.appspot.com', app_identity.get_default_gcs_bucket_name())
 			self.response.headers['Content-Type'] = 'text/plain'
@@ -254,12 +269,16 @@ class UploadPostcode(webapp2.RequestHandler):
 				logging.exception(e)
 				self.response.write('\n\nThere was an error running the program! '
 								'Please check the logs for more details.\n')
-								
+
+#Uploads outcode data on to GCS default bucket.								
 class UploadOutcode(webapp2.RequestHandler):
 	def post(self):
+		#Initialise flags.
 		outcode_flag = False
 		latitude_flag = False
 		longitude_flag = False
+		
+		#User input validation.
 		filename  = cgi.escape(self.request.get('filename'))
 		if filename == "":
 			self.response.write("filename is required" + '<br/><br/>')
@@ -290,7 +309,8 @@ class UploadOutcode(webapp2.RequestHandler):
 					longitude_flag = True
 		else:
 			self.response.write("File name doesn't exist in the app's directory" + '<br/><br/>')
-				
+
+		#If all necessary input is available then application creates GCS file in default bucket and uploads data.
 		if (outcode_flag == True and latitude_flag == True and longitude_flag == True):
 			bucket_name = os.environ.get('local-amenities.appspot.com', app_identity.get_default_gcs_bucket_name())
 			self.response.headers['Content-Type'] = 'text/plain'
@@ -326,11 +346,15 @@ class UploadOutcode(webapp2.RequestHandler):
 				self.response.write('\n\nThere was an error running the program! '
 								'Please check the logs for more details.\n')
 
+#Uploads train station data on to GCS default bucket.	
 class UploadTrainStation(webapp2.RequestHandler):
 	def post(self):
+		#Initialise flags.
 		name_flag = False
 		latitude_flag = False
 		longitude_flag = False
+		
+		#User input validation.
 		filename  = cgi.escape(self.request.get('filename'))
 		if filename == "":
 			self.response.write("Filename is required" + '<br/><br/>')
@@ -361,7 +385,8 @@ class UploadTrainStation(webapp2.RequestHandler):
 					longitude_flag = True
 		else:
 			self.response.write("File name doesn't exist in the app's directory" + '<br/><br/>')
-				
+		
+		#If all necessary input is available then application creates GCS file in default bucket and uploads data.
 		if (name_flag == True and latitude_flag == True and longitude_flag == True):
 			bucket_name = os.environ.get('local-amenities.appspot.com', app_identity.get_default_gcs_bucket_name())
 			self.response.headers['Content-Type'] = 'text/plain'
@@ -396,14 +421,18 @@ class UploadTrainStation(webapp2.RequestHandler):
 				logging.exception(e)
 				self.response.write('\n\nThere was an error running the program! '
 									'Please check the logs for more details.\n')
-									
+
+#Uploads supermarket, GP and school data on to GCS default bucket.									
 class UploadData(webapp2.RequestHandler):
 	def post(self):
+		#Initialise flags.
 		name_flag = False
 		address_flag = False
 		postcode_flag = False
 		latitude_flag = False
 		longitude_flag = False
+		
+		#User input validation.
 		filename  = cgi.escape(self.request.get('filename'))
 		if filename == "":
 			self.response.write("Filename is required" + '<br/><br/>')
@@ -455,7 +484,8 @@ class UploadData(webapp2.RequestHandler):
 					longitude_flag = True
 		else:
 			self.response.write("File name doesn't exist in the app's directory" + '<br/><br/>')
-				
+
+		#If all necessary input is available then application creates GCS file in default bucket and uploads data.			
 		if (name_flag == True and address_flag == True and postcode_flag == True and latitude_flag == True and longitude_flag == True):
 			bucket_name = os.environ.get('local-amenities.appspot.com', app_identity.get_default_gcs_bucket_name())
 			self.response.headers['Content-Type'] = 'text/plain'
