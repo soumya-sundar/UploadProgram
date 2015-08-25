@@ -1,13 +1,15 @@
+# Cloud storage library reference - https://cloud.google.com/appengine/docs/python/googlecloudstorageclient/download
+import cloudstorage as gcs
 import logging
 import os, cgi
 import csv, codecs, cStringIO
-import cloudstorage as gcs
 import webapp2
 import string
 from os import path
 from os.path import exists
 from google.appengine.api import app_identity
 
+# Retry param class reference - https://cloud.google.com/appengine/docs/python/googlecloudstorageclient/retryparams_class
 # Retry can help overcome transient urlfetch or GCS issues, such as timeouts.
 my_default_retry_params = gcs.RetryParams(initial_delay=0.2,
                                           max_delay=5.0,
@@ -15,6 +17,7 @@ my_default_retry_params = gcs.RetryParams(initial_delay=0.2,
                                           max_retry_period=15)
 gcs.set_default_retry_params(my_default_retry_params)
 
+#HTML template reference - https://cloud.google.com/appengine/docs/python/gettingstartedpython27/handlingforms
 #HTML template for main page.
 MAIN_PAGE_HTML = """\
 <html>
